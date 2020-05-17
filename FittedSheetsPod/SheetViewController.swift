@@ -73,6 +73,8 @@ open class SheetViewController: UIViewController {
     public var willDismiss: ((SheetViewController) -> Void)?
     public var didDismiss: ((SheetViewController) -> Void)?
     
+    public var actionImage: UIImageView?
+    
     // MARK: - Private properties
     /// The current preferred container size
     private var containerSize: SheetSize = .fixed(300)
@@ -285,11 +287,22 @@ open class SheetViewController: UIViewController {
         }
         
         self.pullBarView.addSubview(handleView) { (subview) in
-            subview.top.pinToSuperview(inset: handleTopEdgeInset, relation: .equal)
+            self.pullBarView.al.height.set(50)
+            // subview.top.pinToSuperview(inset: handleTopEdgeInset, relation: .equal)
             subview.bottom.pinToSuperview(inset: handleBottomEdgeInset, relation: .equal)
             subview.centerX.alignWithSuperview()
             subview.size.set(handleSize)
         }
+        
+        if let image = actionImage {
+            image.frame.size = CGSize(width: 14, height: 14)
+            
+            self.pullBarView.addSubview(image) { (subview) in
+                subview.bottom.pinToSuperview(inset: 10)
+                subview.right.pinToSuperview(inset: 10)
+            }
+        }
+        
         pullBarView.layer.masksToBounds = true
         pullBarView.backgroundColor = extendBackgroundBehindHandle ? childViewController.view.backgroundColor : UIColor.clear
         
